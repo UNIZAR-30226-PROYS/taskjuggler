@@ -11,5 +11,11 @@ jobs:
         with:
           ruby-version: '3.1'
       - run: gem install taskjuggler
-      - run: tj3 P6_proySW.tjp
+      - run: mkdir results
+      - run: tj3 -o results P6_proySW.tjp
+      - name: Descargar resultados
+        uses: actions/upload-artifact@v2
+        with:
+          name: results
+          path: "./results"
       
