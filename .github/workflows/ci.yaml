@@ -11,5 +11,5 @@ jobs:
         with:
           ruby-version: '3.1'
       - run: gem install taskjuggler
-      - run: taskjuggler P6_proySW.tjp
+      - run: tj3 P6_proySW.tjp
       
