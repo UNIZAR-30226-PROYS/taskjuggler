@@ -85,7 +85,7 @@ task WMGame "Web & Mobile Game" {
   task tgdesign "General System Design" {
       effort 2d
       allocate boss
-      depends !deliveries.start
+      depends WMGame.deliveries.start
   }
 
   task tback "Back End" {
@@ -93,7 +93,7 @@ task WMGame "Web & Mobile Game" {
     purge chargeset
     chargeset back
     responsible dev1
-    depends !tgdesign
+    depends WMGame.tgdesign
     task tBEd "Back End General Design" {
       # The effort to finish this task is 5 man-days.
       effort 5d
@@ -103,7 +103,7 @@ task WMGame "Web & Mobile Game" {
       effort 12d
       actual:effort 11d
       allocate dev1, dev2
-      depends !tBEd
+      depends WMGame.tback.tBEd
       journalentry 2023-03-28 "Game logic completed before deadline" {
         author boss
         summary "The team has ended the game logic before deadline."
@@ -112,7 +112,7 @@ task WMGame "Web & Mobile Game" {
     task tbackDev "Back development" {
       effort 20d
       allocate dev1, dev2
-      depends !tlogic
+      depends WMGame.tback.tlogic
     }
   }
 
@@ -120,7 +120,7 @@ task WMGame "Web & Mobile Game" {
     purge chargeset
     chargeset wFront
     responsible dev3
-    depends !tback.tBEd
+    depends WMGame.tback.tBEd
     task tGUId "Web GUI Design" {
       effort 9d
       allocate dev3
@@ -128,12 +128,12 @@ task WMGame "Web & Mobile Game" {
     task tFEc "Web Front End Construction" {
       effort 15d
       allocate dev2, dev3
-      depends !tGUId
+      depends WMGame.twebF.tGUId
     }
     task tFEt "Web Front End Test" {
       effort 6d
       allocate dev1
-      depends !tFEc
+      depends WMGame.twebF.tFEc
     }    
   }
 
@@ -141,8 +141,8 @@ task WMGame "Web & Mobile Game" {
       effort 10d
       allocate boss
       allocate dev2
-      depends !twebF
-      depends !tback
+      depends WMGame.twebF
+      depends WMGame.tback
   }
 
     
@@ -167,7 +167,7 @@ task WMGame "Web & Mobile Game" {
     }
 
     task done "Ship Product to Customer" {
-      depends !!ttest
+      depends WMGame.ttest
       charge 12000.0 onstart
     }
   }
