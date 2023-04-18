@@ -5,7 +5,7 @@
  * some elements of it
  */
 
-project pSix "Web Game"  2023-03-15 +2m {
+project pSix "Web Game"  2023-03-15 +2.5m {
   # Set the default time zone for the project. If not specified, UTC
   # is used.
   timezone "Europe/Paris"
@@ -53,6 +53,7 @@ balance cost rev
 
 resource boss "Liz Bullock" {
   email "iiii@unizar.es"
+  actual:leaves project 2023-05-07 - 2023-05-12
   rate 160
 }
 resource dev1 "Paul Smith" {
@@ -61,6 +62,7 @@ resource dev1 "Paul Smith" {
 resource dev2 "Samantha Müller" {
   email "jjj@unizar.es"
   rate 100
+  actual:leaves project 2023-05-07 - 2023-05-12
 }
 resource dev3 "Peter Green" {
   email "kkk@unizar.es"
@@ -106,6 +108,7 @@ task WMGame "Web & Mobile Game" {
       depends WMGame.tback.tBEd
       journalentry 2023-03-28 "Game logic completed before deadline" {
         author boss
+        alert green
         summary "The team has ended the game logic before deadline."
       }
     }
@@ -123,7 +126,13 @@ task WMGame "Web & Mobile Game" {
     depends WMGame.tback.tBEd
     task tGUId "Web GUI Design" {
       effort 9d
+      actual:effort 15d
       allocate dev3
+      journalentry 2023-04-11 "Problems with the GUI design tool" {
+        author dev3
+        alert yellow
+        summary "The tool used for the GUI design has given me a lot of problems. I recommend to look for other one."
+      }
     }
     task tFEc "Web Front End Construction" {
       effort 15d
@@ -141,6 +150,12 @@ task WMGame "Web & Mobile Game" {
       effort 10d
       allocate boss
       allocate dev2
+      actual:effort 15d
+      journalentry 2023-04-13 "Problems with the planned dates" {
+        author boss
+        alert red
+        summary "The whole team asiigned to this task has a trip to visit a new client from May 7th to May 12th. Needed to check if the project can be finished on time or it is necessary to reasign efforts."
+      }
       depends WMGame.twebF
       depends WMGame.tback
   }
