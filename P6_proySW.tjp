@@ -5,7 +5,7 @@
  * some elements of it
  */
 
-project pSix "Web & Mobile Game"  2023-03-15 +4m {
+project pSix "Web Game"  2023-03-15 +2m {
   # Set the default time zone for the project. If not specified, UTC
   # is used.
   timezone "Europe/Paris"
@@ -44,8 +44,7 @@ rate 145.2
 # to.
 account cost "Project Cost" {
   account manag "Management"
-  account fMov "Mobile Front-End"
-  account wMov "Web Front-End"
+  account wFront "Web Front-End"
   account back "Back-End"
 }
 account rev "Payments"
@@ -56,29 +55,16 @@ resource boss "Liz Bullock" {
   email "iiii@unizar.es"
   rate 160
 }
-resource dev "Developers" {
-  managers boss
-  resource dev1 "Paul Smith" {
-    email "hhhh@unizar.es"
-  }
-  resource dev2 "Catherin Bono" {
-    email "jjj@unizar.es"
-  }
-  resource dev3 "Samantha Müller" {
-    email "kkk@unizar.es"
-  }
-  resource dev4 "Peter Roy" {
-    email "lll@unizar.es"
-  }
-  resource dev5 "Jane Brown" {
-    email "ffff@unizar.es"
-  }
-  resource dev6 "Frank Wall" {
-    email "gggg@unizar.es"
-    rate 100
-  }
+resource dev1 "Paul Smith" {
+  email "hhhh@unizar.es"
 }
-
+resource dev2 "Samantha Müller" {
+  email "jjj@unizar.es"
+  rate 100
+}
+resource dev3 "Peter Green" {
+  email "kkk@unizar.es"
+}
 
 # Now we specify the work packages. The whole project is described as
 # a task that contains subtasks. These subtasks are then broken down
@@ -90,6 +76,7 @@ task WMGame "Web & Mobile Game" {
   # All work-related costs will be booked to this account unless the
   # subtasks specify something different.
   chargeset manag
+  
   # For the duration of the project we have running cost that are not
   # included in the labor cost.
   charge 60 perday
@@ -102,83 +89,50 @@ task WMGame "Web & Mobile Game" {
   }
 
   task tback "Back End" {
+    # It is necessary to “purge” the “chargeset” because it has been assigned previously to other variable 
     purge chargeset
     chargeset back
     responsible dev1
     depends !tgdesign
     task tBEd "Back End General Design" {
       # The effort to finish this task is 5 man-days.
-      effort 12d
-      allocate dev1, dev2, dev3
+      effort 5d
+      allocate dev1
     }
     task tlogic "Game logic" {
-      # The effort to finish this task is 5 man-days.
       effort 12d
       actual:effort 11d
-      allocate dev1, dev2, dev3
-      actual:allocate dev6
+      allocate dev1, dev2
+      depends !tBEd
       journalentry 2023-03-28 "Game logic completed before deadline" {
         author boss
         summary "The team has ended the game logic before deadline."
       }
     }
-    task tdmodel "Data model" {
-      effort 9d
-      allocate dev1, dev2, dev3
-    }
-    task tpserver "Play server" {
+    task tbackDev "Back development" {
       effort 20d
-      allocate dev1, dev2, dev3
+      allocate dev1, dev2
+      depends !tlogic
     }
   }
 
-  task tfMov "Mobile Front End" {
+  task twebF "Web Front End" {
     purge chargeset
-    chargeset fMov
-    responsible dev4
-    depends !tback.tBEd
-    task tGUId "Mobile GUI Design" {
-      effort 6d
-      allocate dev4, dev5
-    }
-    task tFEc "Mobile Front End Construction" {
-      effort 17d
-      allocate dev4, dev5
-    }
-    task tFEt "Mobile Front End Test" {
-      effort 6d
-      allocate dev4, dev5
-      depends !tFEc
-      journalentry 2023-03-31 "Mobile devices not avilable for tests" {
-        author boss
-        alert red
-        summary -8<-
-          The provider has not provided them yet.
-        ->8-
-        details -8<-
-          The provider says that there are a lot of problems with the 
-          shipment from Korea. It hopes that in a week they will come.
-        ->8-
-      }
-    }    
-  }
-
-  task twMov "Web Front End" {
-    purge chargeset
-    chargeset wMov
-    responsible dev5
+    chargeset wFront
+    responsible dev3
     depends !tback.tBEd
     task tGUId "Web GUI Design" {
       effort 9d
-      allocate dev2, dev5
+      allocate dev3
     }
     task tFEc "Web Front End Construction" {
       effort 15d
       allocate dev2, dev3
+      depends !tGUId
     }
     task tFEt "Web Front End Test" {
       effort 6d
-      allocate dev3, dev5
+      allocate dev1
       depends !tFEc
     }    
   }
@@ -186,9 +140,8 @@ task WMGame "Web & Mobile Game" {
   task ttest "Accpetance tests" {
       effort 10d
       allocate boss
-      allocate dev4
-      depends !twMov
-      depends !tfMov
+      allocate dev2
+      depends !twebF
       depends !tback
   }
 
@@ -250,11 +203,12 @@ macro TaskTip [
 
 textreport frame "" {
   header -8<-
-    == Accounting Project Web & Mobile Game ==
+    == Accounting Project Web Game ==
     <[navigator id="navbar"]>
   ->8-
   footer "----"
-  textreport index "Overview" {
+
+  textreport overvi "Overview" {
     formats html
     center '<[report id="overview"]>'
   }
@@ -275,11 +229,6 @@ textreport frame "" {
   textreport development "Development" {
     formats html
     center '<[report id="development"]>'
-  }
-
-  textreport "Deliveries" {
-    formats html
-    center '<[report id="deliveries"]>'
   }
 
   textreport "ContactList" {
@@ -368,15 +317,6 @@ taskreport development "" {
   sortresources name.up
 }
 
-# A list of all tasks with the percentage completed for each task
-taskreport deliveries "" {
-  headline "Project Deliverables"
-  columns bsi { title 'WBS' }, name, start, end, note { width 150 }, complete,
-          chart { ${TaskTip} }
-  taskroot WMGame.deliveries
-  hideresource @all
-  scenarios plan, actual
-}
 # A list of all employees with their contact details.
 resourcereport contactList "" {
   scenarios actual
