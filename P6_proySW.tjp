@@ -19,7 +19,7 @@ project pSix "Web Game"  2023-03-15 +2.5m {
   # the project reports. If not specified, the current day will be
   # used, but this will likely be outside of the project range, so it
   # can't be seen in the reports.
-  now 2023-04-15-13:00
+  now 2023-05-01-12:00
   # The currency for all money values is the US Dollar.
   currency "EUR"
 
@@ -46,6 +46,7 @@ account cost "Project Cost" {
   account manag "Management"
   account wFront "Web Front-End"
   account back "Back-End"
+  account mFront "Mobile Front-End"
 }
 account rev "Payments"
 # The Profit&Loss analysis should be rev - cost accounts.
@@ -67,7 +68,10 @@ resource dev2 "Samantha Müller" {
 resource dev3 "Peter Green" {
   email "kkk@unizar.es"
 }
-
+resource dev4 "Pilar Fierro" {
+  email "819658@unizar.es"
+  workinghours mon - sun 9:00 - 13:00
+}
 # Now we specify the work packages. The whole project is described as
 # a task that contains subtasks. These subtasks are then broken down
 # into smaller tasks and so on. The innermost tasks describe the real
@@ -146,6 +150,36 @@ task WMGame "Web & Mobile Game" {
     }    
   }
 
+  task tmobileF "Mobile Front-End"{
+    purge chargeset
+    chargeset mFront
+    responsible dev4
+    depends WMGame.tback.tBEd
+    task tGUIm "Mobile GUI Design"{
+      effort 9d
+      actual:effort 15d
+      allocate dev4
+    }
+  }
+
+  task tFEc "Mobile Front End Construction"{
+    effort 22d
+    actual:effort 30d
+    allocate dev2, dev4
+    depends WMGame.tmobileF.tGUIm
+    journalentry 2023-04-11 "Problems with the construction" {
+        author dev4
+        alert yellow
+        summary "The tool has given problems. You should change it."
+      }
+  }
+
+  task tFEt "Mobile Front End Test"{
+    effort 6d
+    allocate dev1
+    depends WMGame.tFEc
+  }
+  
   task ttest "Accpetance tests" {
       effort 10d
       allocate boss
