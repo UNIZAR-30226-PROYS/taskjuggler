@@ -5,7 +5,7 @@
  * some elements of it
  */
 
-project pSix "Web Game"  2024-12-15 +5m {
+project pSix "Web Game"  2025-12-15 +5m {
   # Set the default time zone for the project. If not specified, UTC
   # is used.
   timezone "Europe/Paris"
@@ -19,7 +19,7 @@ project pSix "Web Game"  2024-12-15 +5m {
   # the project reports. If not specified, the current day will be
   # used, but this will likely be outside of the project range, so it
   # can't be seen in the reports.
-  now 2025-02-25-13:00
+  now 2026-02-25-13:00
   # The currency for all money values is the US Dollar.
   currency "EUR"
 
@@ -54,7 +54,7 @@ balance cost rev
 
 resource boss "Liz Bullock" {
   email "iiii@unizar.es"
-  actual:leaves project 2025-03-07 - 2025-04-12
+  actual:leaves project 2026-03-02 - 2026-04-17
   rate 160
 }
 resource dev1 "Paul Smith" {
@@ -63,7 +63,7 @@ resource dev1 "Paul Smith" {
 resource dev2 "Samantha Müller" {
   email "jjj@unizar.es"
   rate 100
-  actual:leaves project 2025-02-01 - 2025-02-28
+  actual:leaves project 2026-02-01 - 2026-02-28
 }
 resource dev3 "Peter Green" {
   email "kkk@unizar.es"
@@ -107,7 +107,7 @@ task WMGame "Web & Mobile Game" {
       actual:effort 11d
       allocate dev1, dev2
       depends WMGame.tback.tBEd
-      journalentry 2025-02-01 "Game logic completed before deadline" {
+      journalentry 2026-02-03 "Game logic completed before deadline" {
         author boss
         alert green
         summary "The team has ended the game logic before deadline."
@@ -129,7 +129,7 @@ task WMGame "Web & Mobile Game" {
       effort 9d
       actual:effort 15d
       allocate dev3
-      journalentry 2025-01-15 "Problems with the GUI design tool" {
+      journalentry 2026-01-15 "Problems with the GUI design tool" {
         author dev3
         alert yellow
         summary "The tool used for the GUI design has given me a lot of problems. I recommend to look for other one."
